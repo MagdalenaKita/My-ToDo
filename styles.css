@@ -61,3 +61,45 @@ h1 {
     text-decoration: none; 
     cursor: pointer;
 }
+
+.todoList {
+    list-style-type: none;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.todoList li {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #24C6DC;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 10px;    
+}
+
+.todoList li div{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.todoList li button{
+    background: none;
+    border: none;
+    color: #fb7185;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.todoList li button:hover {
+    color: #e11d48;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+input[type="checkbox"]:hover {
+    box-shadow: 0px 0px 4px #24C6DC;
+}
