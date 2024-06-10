@@ -83,7 +83,7 @@ h1 {
     gap: 8px;
 }
 
-.todoList li button{
+.deleteTaskButton{
     background: none;
     border: none;
     color: #fb7185;
@@ -91,7 +91,7 @@ h1 {
     transition: 0.5s;
 }
 
-.todoList li button:hover {
+.deleteTaskButton:hover {
     color: #e11d48;
 }
 
