@@ -1,6 +1,7 @@
 const todoForm = document.getElementById('todoForm');
 const todoInput = document.getElementById('todoInput');
 const todoList = document.getElementById('todoList');
+const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 todoForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -14,9 +15,9 @@ todoForm.addEventListener('keypress', (event) => {
     }
 });
 
-document.addEventListener('DOMContentLoaded', loadTaskFromLocalStorage);
+document.addEventListener('DOMContentLoaded', loadTasks);
 
-function getNewTask() {
+function getNewTask() {  
     const newTask = todoInput.value.trim();  // trim usuwa puste znaki np. spację na końcu
 
     if(newTask === '') {
@@ -24,59 +25,71 @@ function getNewTask() {
         return; // zatrzymuje dodanie pustego pola do listy
     }
 
-    addTask(newTask);
-}
+    let task = {
+        text: newTask,
+        completed: false
+    }
 
-function addTask(newTask) {     
-    createTask(newTask);
-    addTaskToLocalStorage(newTask);    
-
+    createTask(task);
+    addTask(task);
     todoInput.value = ''; // wyczyszczenie inputa       
 }
 
-function createTask(newTask) {
+function createTask(newTask, indexTask) {
     const task = document.createElement('li');
     task.className = 'todoItem';
+    task.className = newTask.completed ? 'styleComplete' : '';
 
     const taskDiv = document.createElement('div');
 
     const taskSpan = document.createElement('span');
-    taskSpan.textContent = newTask;
+    taskSpan.textContent = newTask.text;
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
+    checkbox.checked = newTask.completed;
+    
+    checkbox.addEventListener('change', () => {
+        newTask.completed = !newTask.completed;
+        saveTasks();
+        renderTasks(indexTask);
+    })
 
-    // const deleteButton = document.createElement('button');
-    // deleteButton.textContent = 'Usuń';
-    // deleteButton.className = 'deleteTaskButton';
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Usuń';
+    deleteButton.className = 'deleteTaskButton';
+    deleteButton.addEventListener('click', () => {
+        tasks.splice(indexTask, 1);
+        saveTasks();
+        renderTasks(indexTask);
+    })
 
     taskDiv.appendChild(checkbox);
     taskDiv.appendChild(taskSpan);
     task.appendChild(taskDiv);
-    // task.appendChild(deleteButton);
+    task.appendChild(deleteButton);    
+
     todoList.appendChild(task);
-
-    return task;
 }
 
-function addTaskToLocalStorage(newTask) {
-    const tasksArray = getTaskFromLocalStorage();
-    tasksArray.push(newTask);
-    saveTaskToLocalStorage(tasksArray);    
+function addTask(task) {    
+    tasks.push(task);
+    const indexTask = tasks.length - 1;
+    saveTasks();
+    renderTasks(indexTask);
 }
 
-function saveTaskToLocalStorage(tasksArray) {
-    localStorage.setItem('tasks', JSON.stringify(tasksArray));
+function saveTasks() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-function getTaskFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('tasks')) || [];
+function loadTasks() {
+    renderTasks();
 }
 
-function loadTaskFromLocalStorage() {
-    const tasksArray = getTaskFromLocalStorage();
+function renderTasks(indexTask) {
     todoList.innerHTML = '';
-    tasksArray.forEach(task => {
-        createTask(task);
-    });
+    tasks.forEach((task, indexTask) => {
+        createTask(task, indexTask);
+    })
 }
