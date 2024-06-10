@@ -2,20 +2,22 @@ const todoForm = document.getElementById('todoForm');
 const todoInput = document.getElementById('todoInput');
 const todoList = document.getElementById('todoList');
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const checkboxCheckAllTasks = document.getElementById('checkAllTasks');
+
+document.addEventListener('DOMContentLoaded', loadTasks);
 
 todoForm.addEventListener('submit', (event) => {
     event.preventDefault();
     getNewTask()
 });
 
-todoForm.addEventListener('keypress', (event) => {
-    event.preventDefault();
-    if (event.key === 'Enter') {
-        getNewTask()
-    }
-});
-
-document.addEventListener('DOMContentLoaded', loadTasks);
+checkboxCheckAllTasks.addEventListener("change", () => {
+    tasks.forEach(task => { 
+        checkboxCheckAllTasks.checked ? task.completed = true : task.completed = false;
+        saveTasks();
+        renderTasks();
+    })
+}) 
 
 function getNewTask() {  
     const newTask = todoInput.value.trim();  // trim usuwa puste znaki np. spację na końcu

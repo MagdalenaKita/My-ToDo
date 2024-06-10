@@ -8,6 +8,8 @@ body {
     background-image: linear-gradient(109.6deg, rgb(36, 45, 57) 11.2%, rgb(16, 37, 60) 51.2%, rgb(0, 0, 0) 98.6%);
     min-height: 100vh;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 .todoContainer {
@@ -21,6 +23,7 @@ body {
 }
 
 h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
     padding-bottom: 20px;
     background: linear-gradient(to right, #24C6DC 0%, #67edff  51%, #24C6DC  100%);
     -webkit-background-clip: text;
@@ -83,6 +86,10 @@ h1 {
     gap: 8px;
 }
 
+.todoList li div span{
+    text-align: left;
+}
+
 .deleteTaskButton{
     background: none;
     border: none;
@@ -96,6 +103,8 @@ h1 {
 }
 
 input[type="checkbox"] {
+    min-width: 16px;
+    min-height: 16px;
     width: 16px;
     height: 16px;
 }
@@ -109,4 +118,10 @@ input[type="checkbox"]:hover {
             -webkit-text-decoration: line-through;
                     text-decoration: line-through;
     color: #bbbbbb;
+}
+
+.checkAllTasksContainer {
+    margin: 32px 16px 16px;
+    display: flex;
+    gap: 8px
 }

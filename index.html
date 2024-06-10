@@ -12,9 +12,13 @@
     <div class="todoContainer">
         <h1>My ToDo List</h1>
         <form id="todoForm">
-            <input class="todoInput" type="text" id="todoInput" name="todoInput" placeholder="Dodaj nowe zadanie...">
+            <input class="todoInput" type="text" id="todoInput" name="todoInput" placeholder="Dodaj nowe zadanie..." />
             <button type="submit" id="todoButton" class="todoButton">Dodaj zadanie</button>
         </form>
+        <div class="checkAllTasksContainer">
+            <input type="checkbox" id="checkAllTasks" name="checkAllTasks" />
+            <label for="checkAllTasks">Zaznacz wszystkie</label>
+        </div>
         <ul id="todoList" class="todoList"></ul>
     </div>
     <script src="todo.js"></script>
