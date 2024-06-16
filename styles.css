@@ -65,13 +65,20 @@ h1 {
     cursor: pointer;
 }
 
-.todoList {
+.todoGroup {
+    border: 2px solid #24C6DC;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+}
+
+.todoList, .listGroup {
     list-style-type: none;
     width: 100%;
     margin: 20px 0;
 }
 
-.todoList li {
+.todoList li, .listGroup li {
     display: flex;
     justify-content: space-between;
     border: 1px solid #24C6DC;
@@ -80,13 +87,13 @@ h1 {
     border-radius: 10px;    
 }
 
-.todoList li div{
+.todoList li div, .listGroup li div {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.todoList li div span{
+.todoList li div span, .listGroup li div span {
     text-align: left;
 }
 
@@ -124,4 +131,19 @@ input[type="checkbox"]:hover {
     margin: 32px 16px 16px;
     display: flex;
     gap: 8px
+}
+
+.selectGroup {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 8px
+}
+
+.selectGroup select {
+    padding: 4px 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 10px;
 }
