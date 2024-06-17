@@ -11,32 +11,25 @@
 <body>
     <div class="todoContainer">
         <h1>My ToDo List</h1>
+        <form id="groupForm" class="groupForm">
+            <input class="groupInput" type="text" id="groupInput" name="groupInput" placeholder="Dodaj nową grupę..." />
+            <button type="submit" id="groupButton" class="groupButton">Dodaj grupę</button>
+        </form>
         <form id="todoForm">
-            <input class="todoInput" type="text" id="todoInput" name="todoInput" placeholder="Dodaj nowe zadanie..." />
-            <div class="selectGroup">
-                <label for="groups">Wybierz typ zadania:</label>
-                <select id="groups" name="groups">
-                    <option value="important">Ważne</option>
-                    <option value="neutral">Pozostałe</option>
+            <div class="todoGroups">
+                <label for="selectGroups">Wybierz grupę, dla której ma zostać przypisane zadanie:</label>
+                <select id="selectGroups" name="selectGroups">
+                    <option value="Wybierz grupę">Wybierz grupę</option>
                 </select>
             </div>
+            <input class="todoInput" type="text" id="todoInput" name="todoInput" placeholder="Dodaj nowe zadanie..." />
             <button type="submit" id="todoButton" class="todoButton">Dodaj zadanie</button>
         </form>
         <div class="checkAllTasksContainer">
             <input type="checkbox" id="checkAllTasks" name="checkAllTasks" />
             <label for="checkAllTasks">Zaznacz wszystkie</label>
         </div>
-        <!-- <ul id="todoList" class="todoList"></ul> -->
-        <div class="todoGroup">
-            <h3>Ważne</h3>
-            <ul class="listGroup" id="todoListImportant"></ul>
-        </div>
-        <div class="todoGroup">
-            <h3>Pozostałe</h3>
-            <ul class="listGroup" id="todoListNeutral"></ul>
-        </div>
-
-
+        <ul class="listGroup" id="listGroup"></ul>
     </div>
     <script src="todo.js"></script>
 </body>
