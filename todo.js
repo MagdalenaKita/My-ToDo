@@ -39,8 +39,7 @@ const createGroup = (group) => {
     groupTaskList.className = 'listTask';
 
     group.tasks.forEach(taskElement => {
-        // const index = group.tasks.length - 1;
-        const li = createTask(taskElement);
+        const li = createTask(taskElement, group);
         groupTaskList.appendChild(li);
     });
 
@@ -68,7 +67,8 @@ const loadGroupsToSelect = () => {
 const getNewTask = (event) => {
     event.preventDefault();
     const newTask = todoInput.value.trim();
-
+    const uniqId = 'id' + (new Date()).getTime();
+    
     if(newTask === '') {
         alert('Wpisz zadanie');
         return; // zatrzymuje dodanie pustego pola do listy
@@ -86,7 +86,8 @@ const getNewTask = (event) => {
 
     let task = {
         text: newTask,
-        completed: false
+        completed: false,
+        taskId: uniqId
     }
         
     createTask(task);
@@ -94,14 +95,10 @@ const getNewTask = (event) => {
     todoInput.value = ''; 
 }
 
-const createTask = (task) => {
-
-    // const indexGroup = groups.findIndex(group => group.groupName);
-
-    // const indexTask = groups[indexGroup].tasks.length - 1;
-
+const createTask = (task, group) => {
     const todoTask = document.createElement('li');
     todoTask.className = task.completed ? 'styleComplete' : '';
+    todoTask.setAttribute('id', task.taskId);
 
     const todoTaskDiv = document.createElement('div');
 
@@ -111,7 +108,7 @@ const createTask = (task) => {
     const todoTaskCheckbox = document.createElement('input');
     todoTaskCheckbox.type = 'checkbox';
     todoTaskCheckbox.checked = task.completed;
-    
+
     todoTaskCheckbox.addEventListener('change', () => {
         task.completed = !task.completed;
         saveGroup();
@@ -122,12 +119,11 @@ const createTask = (task) => {
     deleteTaskButton.textContent = 'Usuń';
     deleteTaskButton.className = 'deleteTaskButton';
 
-    deleteTaskButton.addEventListener('click', () => {
-        // groups[indexGroup].tasks.splice(indexTask, 1);
-        // console.log("Usuniecie grupy", indexGroup);
-        // console.log("Usuniecie zadania", indexTask);
-        // saveGroup();
-        // loadGroups();
+    deleteTaskButton.addEventListener('click', () => {  
+        const indexTaskToRemove  = group.tasks.findIndex(task => task.taskId === todoTask.getAttribute('id'));
+        group.tasks.splice(indexTaskToRemove, 1);
+        saveGroup();
+        loadGroups();
     })
 
     todoTaskDiv.appendChild(todoTaskCheckbox);
@@ -142,8 +138,6 @@ const addTask = (task) => {
     const selectGroupName = selectGroups.value;
     const indexGroupToSaveTask = groups.findIndex(group => selectGroupName === group.groupName);
     groups[indexGroupToSaveTask].tasks.push(task);
-    // const indexTask = groups[indexGroupToSaveTask].tasks.length - 1;
-    
     saveGroup();
     loadGroups();
 }
@@ -174,79 +168,6 @@ document.addEventListener('DOMContentLoaded', loadGroups);
 groupForm.addEventListener('submit', getNewGroup);
 todoForm.addEventListener('submit', getNewTask);
 checkboxCheckAllTasks.addEventListener("change", markAllTasks);
-
-
-
-// towrzenie zadania, czyli dodawanie odpowiednich elementów z HTML i klas. 
-// function createTask(newTask, indexTask) {
-//     const task = document.createElement('li');
-//     task.className = 'todoItem';
-//     task.className = newTask.completed ? 'styleComplete' : ''; // newtask to jest to samo co task z 40 linii, a task to jest to co pobralismy w linii 53 (pozmieniać potem te nazwy, bo może się mylić)
-
-//     const taskDiv = document.createElement('div');
-
-//     const taskSpan = document.createElement('span');
-//     taskSpan.textContent = newTask.text;
-
-//     const checkbox = document.createElement('input');
-//     checkbox.type = 'checkbox';
-//     checkbox.checked = newTask.completed;
-    
-//     checkbox.addEventListener('change', () => {
-//         newTask.completed = !newTask.completed;
-//         saveTasks();
-//         renderTasks(indexTask);
-//     })
-
-//     const deleteButton = document.createElement('button');
-//     deleteButton.textContent = 'Usuń';
-//     deleteButton.className = 'deleteTaskButton';
-//     deleteButton.addEventListener('click', () => {
-//         tasks.splice(indexTask, 1);        
-//         saveTasks();
-//         renderTasks(indexTask);
-//     })
-
-//     taskDiv.appendChild(checkbox);
-//     taskDiv.appendChild(taskSpan);
-//     task.appendChild(taskDiv);
-//     task.appendChild(deleteButton);    
-    
-    // todoList.appendChild(task);
-    // if(newTask.group === 'important') {
-    //     todoListImportant.appendChild(task);
-    // } else {
-    //     todoListNeutral.appendChild(task);
-    // }
-// }
-
-// dodajemy zadanie do tablicy tasks
-// function addTask(task) {   
-//     tasks.push(task);
-//     const indexTask = tasks.length - 1;
-//     saveTasks();
-//     renderTasks(indexTask);
-// }
-
-// zapisywanie tablicy tasks do localStorage
-// function saveTasks() {
-//     localStorage.setItem('tasks', JSON.stringify(tasks));
-// }
-
-// function loadTasks() {
-//     renderTasks();
-// }
-
-// wyrenderowanie zadań na ekranie
-// function renderTasks() {
-//     // todoList.innerHTML = '';
-//     todoListImportant.innerHTML = '';
-//     todoListNeutral.innerHTML = '';
-//     tasks.forEach((task, indexTask) => {
-//         createTask(task, indexTask);
-//     })
-// }
-
 
 // naprawa programu
 // podzielić na pliki
