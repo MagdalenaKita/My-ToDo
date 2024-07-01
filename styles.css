@@ -150,3 +150,7 @@ input[type="checkbox"]:hover {
     gap: 8px
 }
 
+.draggedItemStyle {
+    opacity: 50%;
+    background-color: #24C6DC;
+}

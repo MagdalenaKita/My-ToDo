@@ -10,6 +10,8 @@ const checkboxCheckAllTasks = document.getElementById('checkAllTasks');
 
 const groups = JSON.parse(localStorage.getItem('groups')) || [];
 
+let draggedItem = null;
+
 
 const getNewGroup = (event) => {
     event.preventDefault();
@@ -98,7 +100,8 @@ const getNewTask = (event) => {
 const createTask = (task, group) => {
     const todoTask = document.createElement('li');
     todoTask.className = task.completed ? 'styleComplete' : '';
-    todoTask.setAttribute('id', task.taskId);
+    todoTask.setAttribute('draggable', true);
+    todoTask.classList.add('drag-item');
 
     const todoTaskDiv = document.createElement('div');
 
@@ -118,18 +121,23 @@ const createTask = (task, group) => {
     const deleteTaskButton = document.createElement('button');
     deleteTaskButton.textContent = 'Usuń';
     deleteTaskButton.className = 'deleteTaskButton';
-
-    deleteTaskButton.addEventListener('click', () => {  
-        const indexTaskToRemove  = group.tasks.findIndex(task => task.taskId === todoTask.getAttribute('id'));
+    const handleDeleteTask = () => {  
+        
+        const indexTaskToRemove  = group.tasks.findIndex(({ taskId }) => taskId === task.taskId);  //destrukturyzacja 
         group.tasks.splice(indexTaskToRemove, 1);
         saveGroup();
         loadGroups();
-    })
+    }
+    deleteTaskButton.addEventListener('click', handleDeleteTask);
 
     todoTaskDiv.appendChild(todoTaskCheckbox);
     todoTaskDiv.appendChild(todoTaskSpan);
     todoTask.appendChild(todoTaskDiv);
     todoTask.appendChild(deleteTaskButton);
+
+    todoTask.addEventListener('dragstart', handleDragStart);
+    todoTask.addEventListener('dragover', handleDragOver);
+    todoTask.addEventListener('drop', handleDrop);
 
     return todoTask;
 }
@@ -164,11 +172,40 @@ const markAllTasks = () => {
     })
 }
 
+const handleDragStart = (event) => {
+    draggedItem = event.target;
+    event.dataTransfer.effectAllowed = 'move';
+    // event.dataTransfer.setData('text/html', draggedItem.innerHTML);
+    draggedItem.classList.add('draggedItemStyle');
+}
+
+const handleDragOver = (event) => {
+    event.preventDefault();
+}
+
+const handleDrop = (event) => {
+    event.preventDefault();
+    const targetItem = event.target; 
+    // targetItem.parentNode.prepend(draggedItem);  
+
+    const draggedGroupIndex = groups.findIndex((group) => group.groupName === draggedItem.parentNode.parentNode.firstChild.textContent);    
+    const targetGroupIndex = groups.findIndex((group) => group.groupName === targetItem.parentNode.parentNode.firstChild.textContent);    
+
+    const indexDraggedTask = groups[draggedGroupIndex].tasks.findIndex(task => task.text === draggedItem.firstChild.textContent);
+    const taskText = groups[draggedGroupIndex].tasks[indexDraggedTask].text;
+    const taskCompleted = groups[draggedGroupIndex].tasks[indexDraggedTask].completed;
+    const taskTaskId = groups[draggedGroupIndex].tasks[indexDraggedTask].taskId;
+
+    groups[draggedGroupIndex].tasks.splice(indexDraggedTask, 1);
+    groups[targetGroupIndex].tasks.push({text: taskText, completed: taskCompleted, taskId: taskTaskId});
+
+    draggedItem = null;
+    
+    saveGroup();
+    loadGroups();
+}
+
 document.addEventListener('DOMContentLoaded', loadGroups);
 groupForm.addEventListener('submit', getNewGroup);
 todoForm.addEventListener('submit', getNewTask);
 checkboxCheckAllTasks.addEventListener("change", markAllTasks);
-
-// naprawa programu
-// podzielić na pliki
-// korzystać z vite
