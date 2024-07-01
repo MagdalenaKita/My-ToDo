@@ -112,28 +112,30 @@ const createTask = (task, group) => {
     todoTaskCheckbox.type = 'checkbox';
     todoTaskCheckbox.checked = task.completed;
 
-    todoTaskCheckbox.addEventListener('change', () => {
-        task.completed = !task.completed;
-        saveGroup();
-        loadGroups();
-    })
-
     const deleteTaskButton = document.createElement('button');
     deleteTaskButton.textContent = 'Usuń';
     deleteTaskButton.className = 'deleteTaskButton';
-    const handleDeleteTask = () => {  
-        
+
+    const handleCompletedTask = () => {
+        task.completed = !task.completed;
+        saveGroup();
+        loadGroups();
+    }
+
+    const handleDeleteTask = () => {          
         const indexTaskToRemove  = group.tasks.findIndex(({ taskId }) => taskId === task.taskId);  //destrukturyzacja 
         group.tasks.splice(indexTaskToRemove, 1);
         saveGroup();
         loadGroups();
-    }
-    deleteTaskButton.addEventListener('click', handleDeleteTask);
-
+    } 
+    
     todoTaskDiv.appendChild(todoTaskCheckbox);
     todoTaskDiv.appendChild(todoTaskSpan);
     todoTask.appendChild(todoTaskDiv);
     todoTask.appendChild(deleteTaskButton);
+
+    todoTaskCheckbox.addEventListener('change', handleCompletedTask)
+    deleteTaskButton.addEventListener('click', handleDeleteTask);
 
     todoTask.addEventListener('dragstart', handleDragStart);
     todoTask.addEventListener('dragover', handleDragOver);
